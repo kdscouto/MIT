@@ -1,24 +1,30 @@
+# ...existing code...
 from dotenv import load_dotenv
 import discord
 import os
 
-load dotenv()
+load_dotenv()
 
-intents = discord.intents.default()
+intents = discord.Intents.default()
 intents.message_content = True
 
 client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
-  print('We have logged in as {0.user}'.format(client))
+    print(f'We have logged in as {client.user}')
 
 @client.event
 async def on_message(message):
-  if message.author == client.user:
-    return
+    if message.author == client.user:
+        return
 
-if message.content.startswith('$hello'): 
-  await message.channel.send('Hello')
+    if message.content.startswith('$hello'):
+        await message.channel.send('Hello')
 
-client.run(os.getenv('DISCORD_TOKEN'))
+token = os.getenv('DISCORD_TOKEN')
+if not token:
+    raise RuntimeError("DISCORD_TOKEN environment variable not set")
+
+client.run(token)
+# ...existing code...
